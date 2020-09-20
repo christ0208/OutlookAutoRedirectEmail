@@ -37,20 +37,19 @@ You can download it [here](https://chromedriver.chromium.org/downloads). After d
 
 ## Contributing
 
-Please read [CONTRIBUTING.md]() for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING.md](https://github.com/christ0208/OutlookAutoRedirectEmail/blob/master/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](). 
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/christ0208/OutlookAutoRedirectEmail/tags). 
 
 ## Authors
 
 * **Christopher L** - *Initial work* - [christ0208](https://github.com/christ0208)
 
-See also the list of [contributors]() who participated in this project.
+See also the list of [contributors](https://github.com/christ0208/OutlookAutoRedirectEmail/graphs/contributors) who participated in this project.
 
 ## Acknowledgments
 
 * Adobe Auto-configure using Selenium by HR.
 * https://selenium-python.readthedocs.io/
-* 
