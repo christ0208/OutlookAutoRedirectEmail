@@ -12,133 +12,171 @@ class OutlookWebSettings:
         self.driver = driver
 
     def set_rule_settings(self, url, data):
-        self.driver.get(url)
-
-        WebDriverWait(self.driver, 15).until(expected_conditions.visibility_of_element_located(
-            (By.XPATH, "//*[contains(text(), 'Add new rule')]")
-        ))
-        time.sleep(3)
         try:
-            delete_button_rules = self.driver.find_elements_by_xpath("//button[@title='Delete rule']")
+            self.driver.get(url)
 
-            for rule in delete_button_rules:
-                rule.click()
-                WebDriverWait(self.driver, 10).until(expected_conditions.visibility_of_element_located(
-                    (By.XPATH, "//button[starts-with(@id,'ok-')]")
-                ))
-                self.driver.find_element_by_xpath(
-                    "//button[starts-with(@id,'ok-')]"
-                ).send_keys(Keys.ENTER)
-        except NoSuchElementException:
-            pass
+            WebDriverWait(self.driver, 15).until(expected_conditions.visibility_of_element_located(
+                (By.XPATH, "//*[contains(text(), 'Add new rule')]")
+            ))
 
-        self.driver.find_element_by_xpath(
-            "//*[contains(text(), 'Add new rule')]"
-        ).click()
+            time.sleep(2)
 
-        WebDriverWait(self.driver, 10).until(lambda driver: driver.execute_script('return document.readyState') == 'complete')
-        WebDriverWait(self.driver, 10).until(expected_conditions.visibility_of_element_located(
-            (By.XPATH, "//span[contains(text(), 'Select an action')]")
-        ))
-
-        self.driver.execute_script('document.querySelector("input[placeholder=\'Search settings\']").style.display=\'none\'')
-        self.driver.implicitly_wait(5)
-        while(True):
-            name_input = self.driver.find_element_by_xpath("//input[@placeholder='Name your rule']")
-            name_input.send_keys(data["studentEmail"])
-            time.sleep(1)
-            current_value = name_input.get_attribute('value')
-
-            if current_value == data['studentEmail']:
-                break
-
-        while(True):
             try:
-                self.driver.find_element_by_xpath("//button[@title='Redirect to']")
+                self.driver.find_element_by_xpath("//button[@aria-label='Close']").click()
 
-                break
+                time.sleep(2)
             except NoSuchElementException:
-                self.driver.find_element_by_xpath(
-                    "//span[contains(text(), 'Select an action')]"
-                ).click()
-            time.sleep(1)
+                pass
 
-        self.driver.find_element_by_xpath("//button[@title='Redirect to']").click()
-        WebDriverWait(self.driver, 10).until(expected_conditions.visibility_of_element_located(
-            (By.XPATH, "//input[@role='combobox'][@class='ms-BasePicker-input pickerInput_9afdc73b']")
-        ))
+            try:
+                delete_button_rules = self.driver.find_elements_by_xpath("//button[@title='Delete rule']")
 
-        while (True):
-            name_input = lambda: self.driver.find_element_by_xpath("//input[@role='combobox'][@class='ms-BasePicker-input pickerInput_9afdc73b']")
-            name_input().send_keys(Keys.NULL)
-            self.driver.implicitly_wait(1)
-            name_input().send_keys(data["studentEmail"])
-            time.sleep(2)
-            current_value = name_input().get_attribute('value')
+                for rule in delete_button_rules:
+                    rule.click()
+                    WebDriverWait(self.driver, 10).until(expected_conditions.visibility_of_element_located(
+                        (By.XPATH, "//button[starts-with(@id,'ok-')]")
+                    ))
+                    self.driver.find_element_by_xpath(
+                        "//button[starts-with(@id,'ok-')]"
+                    ).send_keys(Keys.ENTER)
+            except NoSuchElementException:
+                pass
 
-            if current_value == data['studentEmail']:
-                break
+            self.driver.find_element_by_xpath(
+                "//*[contains(text(), 'Add new rule')]"
+            ).click()
 
-        self.driver.find_element_by_xpath(
-            "//input[@role='combobox']"
-        ).send_keys(Keys.TAB)
+            WebDriverWait(self.driver, 10).until(lambda driver: driver.execute_script('return document.readyState') == 'complete')
+            WebDriverWait(self.driver, 10).until(expected_conditions.visibility_of_element_located(
+                (By.XPATH, "//span[contains(text(), 'Select an action')]")
+            ))
 
-        self.driver.find_element_by_xpath(
-            "//*[contains(text(), 'Select a condition')]"
-        ).click()
-        WebDriverWait(self.driver, 10).until(expected_conditions.visibility_of_element_located(
-            (By.XPATH,
-             "//button[@title='From']")
-        ))
-        self.driver.find_element_by_xpath("//button[@title='From']").click()
-        WebDriverWait(self.driver, 10).until(expected_conditions.visibility_of_element_located(
-            (By.XPATH, "//input[@role='combobox'][@class='ms-BasePicker-input pickerInput_9afdc73b']")
-        ))
+            self.driver.execute_script('document.querySelector("input[placeholder=\'Search settings\']").style.display=\'none\'')
 
-        while (True):
-            name_input = self.driver.find_element_by_xpath("//input[@role='combobox'][@class='ms-BasePicker-input pickerInput_9afdc73b']")
-            name_input.send_keys(Keys.NULL)
-            self.driver.implicitly_wait(1)
-            name_input.send_keys(data['from'])
-            time.sleep(2)
-            current_value = name_input.get_attribute('value')
+            err_count = 0
+            while(True):
+                name_input = self.driver.find_element_by_xpath("//input[@placeholder='Name your rule']")
+                name_input.send_keys(data["studentEmail"])
+                time.sleep(1)
+                current_value = name_input.get_attribute('value')
 
-            if current_value == data['from']:
-                break
+                if current_value == data['studentEmail']:
+                    break
+                else:
+                    err_count += 1
 
-        self.driver.find_element_by_xpath(
-            "//input[@role='combobox']"
-        ).send_keys(Keys.TAB)
-        self.driver.find_element_by_xpath(
-            "//*[contains(text(), 'Add another condition')]"
-        ).click()
-        WebDriverWait(self.driver,10).until(expected_conditions.visibility_of_element_located(
-            (By.XPATH, "//*[contains(text(), 'And...')]")
-        ))
-        self.driver.find_element_by_xpath(
-            "//*[contains(text(), 'And...')]"
-        ).click()
-        self.driver.find_element_by_xpath("//button[@title='Subject includes']").click()
-        WebDriverWait(self.driver, 10).until(expected_conditions.visibility_of_element_located(
-            (By.XPATH, "//input[@placeholder='Enter words to look for']")
-        ))
+                if err_count > 2:
+                    return False
 
-        while (True):
-            name_input = self.driver.find_element_by_xpath("//input[@placeholder='Enter words to look for']")
-            name_input.send_keys(Keys.NULL)
-            self.driver.implicitly_wait(1)
-            name_input.send_keys(data['subject'])
-            time.sleep(2)
-            current_value = name_input.get_attribute('value')
+            while(True):
+                try:
+                    self.driver.find_element_by_xpath("//button[@title='Redirect to']")
 
-            if current_value == data['subject']:
-                break
+                    break
+                except NoSuchElementException:
+                    self.driver.find_element_by_xpath(
+                        "//span[contains(text(), 'Select an action')]"
+                    ).click()
+                time.sleep(1)
 
-        self.driver.find_element_by_xpath("//*[contains(text(), 'Stop processing more rules')]").click()
+            self.driver.find_element_by_xpath("//button[@title='Redirect to']").click()
+            WebDriverWait(self.driver, 10).until(expected_conditions.visibility_of_element_located(
+                (By.XPATH, "//input[@role='combobox'][@class='ms-BasePicker-input pickerInput_9afdc73b']")
+            ))
 
-        self.driver.find_element_by_xpath(
-            "//*[contains(text(), 'Save')]"
-        ).click()
+            err_count=0
+            while (True):
+                name_input = lambda: self.driver.find_element_by_xpath("//input[@role='combobox'][@class='ms-BasePicker-input pickerInput_9afdc73b']")
+                name_input().send_keys(Keys.NULL)
+                self.driver.implicitly_wait(1)
+                name_input().send_keys(data["studentEmail"])
+                time.sleep(1)
+                current_value = name_input().get_attribute('value')
+
+                if current_value == data['studentEmail']:
+                    break
+                else:
+                    err_count += 1
+
+                if err_count > 2:
+                    return False
+
+            self.driver.find_element_by_xpath(
+                "//input[@role='combobox']"
+            ).send_keys(Keys.TAB)
+
+            self.driver.find_element_by_xpath(
+                "//*[contains(text(), 'Select a condition')]"
+            ).click()
+            WebDriverWait(self.driver, 10).until(expected_conditions.visibility_of_element_located(
+                (By.XPATH,
+                 "//button[@title='From']")
+            ))
+            self.driver.find_element_by_xpath("//button[@title='From']").click()
+            WebDriverWait(self.driver, 10).until(expected_conditions.visibility_of_element_located(
+                (By.XPATH, "//input[@role='combobox'][@class='ms-BasePicker-input pickerInput_9afdc73b']")
+            ))
+
+            err_count = 0
+            while (True):
+                name_input = self.driver.find_element_by_xpath("//input[@role='combobox'][@class='ms-BasePicker-input pickerInput_9afdc73b']")
+                name_input.send_keys(Keys.NULL)
+                self.driver.implicitly_wait(1)
+                name_input.send_keys(data['from'])
+                time.sleep(1)
+                current_value = name_input.get_attribute('value')
+
+                if current_value == data['from']:
+                    break
+                else:
+                    err_count += 1
+
+                if err_count > 2:
+                    return False
+
+            self.driver.find_element_by_xpath(
+                "//input[@role='combobox']"
+            ).send_keys(Keys.TAB)
+            self.driver.find_element_by_xpath(
+                "//*[contains(text(), 'Add another condition')]"
+            ).click()
+            WebDriverWait(self.driver,10).until(expected_conditions.visibility_of_element_located(
+                (By.XPATH, "//*[contains(text(), 'And...')]")
+            ))
+            self.driver.find_element_by_xpath(
+                "//*[contains(text(), 'And...')]"
+            ).click()
+            self.driver.find_element_by_xpath("//button[@title='Subject includes']").click()
+            WebDriverWait(self.driver, 10).until(expected_conditions.visibility_of_element_located(
+                (By.XPATH, "//input[@placeholder='Enter words to look for']")
+            ))
+
+            err_count = 0
+            while (True):
+                name_input = self.driver.find_element_by_xpath("//input[@placeholder='Enter words to look for']")
+                name_input.send_keys(Keys.NULL)
+                self.driver.implicitly_wait(1)
+                name_input.send_keys(data['subject'])
+                time.sleep(1)
+                current_value = name_input.get_attribute('value')
+
+                if current_value == data['subject']:
+                    break
+                else:
+                    err_count += 1
+
+                if err_count > 2:
+                    return False
+
+            self.driver.find_element_by_xpath("//*[contains(text(), 'Stop processing more rules')]").click()
+
+            self.driver.find_element_by_xpath(
+                "//*[contains(text(), 'Save')]"
+            ).click()
+
+            return True
+        except Exception:
+            return False
 
     def set_junk_email_settings(self, url, data):
         self.driver.get(url)
@@ -146,6 +184,15 @@ class OutlookWebSettings:
         WebDriverWait(self.driver, 15).until(expected_conditions.visibility_of_element_located(
             (By.XPATH, "//button[contains(@class,'_3B7DMxWQgF7_ejwoA86ngO')]")
         ))
+
+        time.sleep(2)
+
+        try:
+            self.driver.find_element_by_xpath("//button[@aria-label='Close']").click()
+
+            time.sleep(2)
+        except NoSuchElementException:
+            pass
 
         try:
             delete_button_rules = self.driver.find_elements_by_xpath("//button[contains(@class, 'ms-Button ms-Button--icon')]")

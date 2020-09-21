@@ -23,18 +23,22 @@ if __name__ == '__main__':
     collected_data = excel_reader.read()
 
     for data in collected_data:
-        prep_chrome_driver()
-    
-        outlook_web_login = OutlookWebLogin(chrome_driver)
-        outlook_web_login.redirect_login_page('https://outlook.live.com/owa/?nlp=1')
-        outlook_web_login.do_login({"email": data["targetEmail"], "password": data["targetPassword"]})
-        outlook_web_login.bypass_stay_signed_in()
-    
-        outlook_web_settings = OutlookWebSettings(chrome_driver)
-        outlook_web_settings.set_rule_settings('https://outlook.office365.com/mail/options/mail/rules', {"studentEmail": data["studentEmail"], "from": data["from"], "subject": data["subject"]})
-        outlook_web_settings.set_junk_email_settings('https://outlook.office365.com/mail/options/mail/junkEmail', {"excludeDomain": data["excludeDomain"]})
-    
-        chrome_driver.close()
+        automate_status = False
+        while not automate_status:
+            prep_chrome_driver()
+
+            outlook_web_login = OutlookWebLogin(chrome_driver)
+            outlook_web_login.redirect_login_page('https://outlook.live.com/owa/?nlp=1')
+            outlook_web_login.do_login({"email": data["targetEmail"], "password": data["targetPassword"]})
+            outlook_web_login.bypass_stay_signed_in()
+
+            outlook_web_settings = OutlookWebSettings(chrome_driver)
+            automate_status = outlook_web_settings.set_rule_settings('https://outlook.office365.com/mail/options/mail/rules', {"studentEmail": data["studentEmail"], "from": data["from"], "subject": data["subject"]})
+
+            if automate_status:
+                outlook_web_settings.set_junk_email_settings('https://outlook.office365.com/mail/options/mail/junkEmail', {"excludeDomain": data["excludeDomain"]})
+
+            chrome_driver.close()
 
         print(data["targetEmail"] + ' done setting')
 
