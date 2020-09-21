@@ -87,8 +87,6 @@ class OutlookWebSettings:
             err_count=0
             while (True):
                 name_input = lambda: self.driver.find_element_by_xpath("//input[@role='combobox'][@class='ms-BasePicker-input pickerInput_9afdc73b']")
-                name_input().send_keys(Keys.NULL)
-                self.driver.implicitly_wait(1)
                 name_input().send_keys(data["studentEmail"])
                 time.sleep(1)
                 current_value = name_input().get_attribute('value')
@@ -120,8 +118,6 @@ class OutlookWebSettings:
             err_count = 0
             while (True):
                 name_input = self.driver.find_element_by_xpath("//input[@role='combobox'][@class='ms-BasePicker-input pickerInput_9afdc73b']")
-                name_input.send_keys(Keys.NULL)
-                self.driver.implicitly_wait(1)
                 name_input.send_keys(data['from'])
                 time.sleep(1)
                 current_value = name_input.get_attribute('value')
@@ -154,8 +150,6 @@ class OutlookWebSettings:
             err_count = 0
             while (True):
                 name_input = self.driver.find_element_by_xpath("//input[@placeholder='Enter words to look for']")
-                name_input.send_keys(Keys.NULL)
-                self.driver.implicitly_wait(1)
                 name_input.send_keys(data['subject'])
                 time.sleep(1)
                 current_value = name_input.get_attribute('value')
